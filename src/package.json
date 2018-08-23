@@ -1,0 +1,35 @@
+{
+  "name": "a801-launcher",
+  "version": "0.3.0",
+  "productName": "Atelier 801 Launcher",
+  "description": "Launches any game from Atelier 801",
+  "main": "main.js",
+  "author": {
+    "name": "Vinicius Giroto"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ViniciusGiroto/Transformice-Linux/issues"
+  },
+  "keywords": [
+    "Transformice",
+    "DeadMaze",
+    "Bouboum",
+    "Fortoresse",
+    "Extinction",
+    "Nekodancer",
+    "TFM",
+    "MMO"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ViniciusGiroto/Transformice-Linux"
+  },
+  "dependencies": {
+    "download": "^7.1.0",
+    "node-fetch": "^2.2.0",
+    "rimraf": "^2.6.2",
+    "semver": "^5.5.1",
+    "tar": "^4.4.6"
+  }
+}

@@ -1,8 +1,8 @@
 {
-  "dest": "/dist/installers/",
+  "dest": "dist/installers/",
   "name": "Transformice",
-  "icon": "TFM/icon.png",
-  "bin": "app",
+  "icon": "src/images/icon.png",
+  "bin": "tfm-standalone",
   "categories": [
     "Utility"
   ],

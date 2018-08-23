@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Transformice</title>
+  <link rel="stylesheet" type="text/css" href="style/main.css" />
+</head>
+<body draggable="false">
+  <div id="main">
+    <header>
+      <img src="images/logo-atelier801.png" height="192" alt="[Transformice]">
+    </header>
+    <main>
+      <ul>
+        <li onclick="openGame('tfm');">Transformice</li>
+        <li onclick="openGame('ddm');">Dead Maze</li>
+        <li onclick="openGame('fort');">Fortoresse</li>
+        <li onclick="openGame('neko');">Nekodancer</li>
+        <li onclick="openGame('bbm');">Bouboum</li>
+        <li onclick="openGame('ext');">Extinction</li>
+      </ul>
+    </main>
+    <footer>
+      <ul>
+        <li onclick="shell.openExternal('https://atelier801.com/profile?pr=Squalleze%230000');">
+          Created by Squalleze<small>#0000</small>
+        </li>
+        <li onclick="updateFlash();" id="flashButton">Check for Flash updates</li>
+      </ul>
+    </footer>
+  </div>
+  <div id="popup" style="display: none;">
+    <header>
+      <h5></h5>
+    </header>
+    <hr>
+    <main></main>
+    <hr>
+    <footer>
+      <button onclick="closePopup();">Close</button>
+    </footer>
+  </div>
+  <script>
+    const { ipcRenderer, shell } = require('electron');
+    let isFlashUpdating = false;
+
+    ipcRenderer.on('update-flash-begin', (e) => {
+      flashButton.innerText = 'Updating flash';
+      showPopup('Flash update', 'Trying to update flash, this may take a while.');
+    });
+
+    ipcRenderer.on('update-flash-end', (e, code) => {
+      isFlashUpdating = false;
+      flashButton.innerText = 'Check for Flash updates';
+      if (code === -1)
+        return showPopup('Flash update', 'Successfully updated!\nPlease restart the standalone to apply the changes.');
+      return showPopup('Flash update', 'Flash is up-to-date!');
+    });
+
+    ipcRenderer.on('update-flash-error', (e) => {
+      isFlashUpdating = false;
+      showPopup('Flash update', 'An error happened trying to update Flash, try again later.\nSorry :(');
+    });
+
+    function openGame(id) {
+      if (isFlashUpdating)
+        return showPopup('Slow down!', 'You must wait Flash finish updating before playing anything.\nSorry :(');
+      document.body.style.filter = 'blur(.5em)';
+      ipcRenderer.send('open-game', id);
+    }
+
+    function updateFlash() {
+      if (isFlashUpdating)
+        return;
+      isFlashUpdating = true;
+      ipcRenderer.send('update-flash');
+    }
+
+    function showPopup(title, message) {
+      popup.children[0].children[0].innerText = title; // h2
+      popup.children[2].innerText = message; // main
+      main.style.filter = 'blur(.5em)';
+      popup.style.display = 'block';
+      popup.animate({
+        opacity: [0, 1]
+      }, {
+        duration: 500,
+        fill: 'forwards'
+      });
+    }
+
+    function closePopup() {
+      main.style.filter = '';
+      const anim = popup.animate({
+        opacity: [1, 1]
+      }, {
+        duration: 500,
+        fill: 'forwards'
+      });
+
+      anim.onfinish = () => {
+        popup.style.display = 'none';
+      };
+    }
+  </script>
+</body>
+</html>

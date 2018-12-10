@@ -59,18 +59,6 @@ for (const arg of process.argv) {
   }
 }
 
-function setupShortcuts() {
-  env.verbose && console.log('Setting up shortcuts');
-  globalShortcut.register('Ctrl+q', () => win.close());
-  globalShortcut.register('Ctrl+Shift+t', () => openGame('tfm'));
-  globalShortcut.register('Ctrl+Shift+n', () => openGame('neko'));
-  globalShortcut.register('Ctrl+Shift+f', () => openGame('fort'));
-  globalShortcut.register('Ctrl+Shift+b', () => openGame('bbm'));
-  globalShortcut.register('Ctrl+Shift+d', () => openGame('ddm'));
-  globalShortcut.register('F11', () => win.setFullScreen(!win.isFullScreen()));
-  globalShortcut.register('Ctrl+Esc', () => (currentGame && openMain()));
-}
-
 function createWindow(config, url) {
   env.verbose && console.log('Creating new window (%s)', url);
   const win = new BrowserWindow(config);
@@ -134,11 +122,11 @@ try {
   if (env.verbose) {
     console.error('Could not load libpepflashplayer');
     console.error(err);
-    console.log('Trying to install lilpepflashplayer from Adobe\'s website');
+    console.log('Trying to install libpepflashplayer from Adobe\'s website');
   }
   flash.update(flashVersion, flashPath)
     .then(() => {
-      env.verbose && console.log('Installed lilpepflashplayer successfully');
+      env.verbose && console.log('Installed libpepflashplayer successfully');
       dialog.showMessageBox({
         title: 'FlashPlayer installed',
         message: 'Please restart the application',
@@ -148,7 +136,7 @@ try {
     })
     .catch((err) => {
       if (env.verbose) {
-        console.error('Could not install lilpepflashplayer');
+        console.error('Could not install libpepflashplayer');
         console.error(err);
       }
       dialog.showMessageBox({
@@ -157,14 +145,13 @@ try {
         type: 'error',
         buttons: ['Close']
       }, () => app.quit());
-    })
+    });
 }
 
 // Starts Application
 app.once('ready', () => {
   if (!hasFlash) return;
   env.verbose && console.log('Application is ready');
-  setupShortcuts();
   openMain();
 });
 

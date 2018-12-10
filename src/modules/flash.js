@@ -2,7 +2,7 @@ const fetch = require('node-fetch');
 const download = require('download');
 const tar = require('tar');
 const path = require('path');
-const fs = require('fs');
+const fs = require('fs-extra');
 const os = require('os');
 const rimraf = require('rimraf');
 
@@ -43,9 +43,9 @@ function rmdir(dir) {
   return new Promise((resolve, reject) => rimraf(dir, (err) => (err ? reject(err) : resolve())));
 }
 
-function rename(oldPath, newPath) {
+function move(oldPath, newPath) {
   env.verbose && console.log('Renaming file `%s` to `%s`', oldPath, newPath);
-  return new Promise((resolve, reject) => fs.rename(oldPath, newPath, err => err ? reject(err) : resolve()));
+  return new Promise((resolve, reject) => fs.move(oldPath, newPath, (err) => (err ? reject(err) : resolve())));
 }
 
 function downloadUpdate(url, folder) {
@@ -82,7 +82,7 @@ async function updateFlash(currentVersion, flashPath) {
   
     await downloadUpdate(latestData.download_url, folder);
     await rmdir(flashPath);
-    await rename(folder, flashPath);
+    await move(folder, flashPath);
   }
 
   isUpdating = false;
